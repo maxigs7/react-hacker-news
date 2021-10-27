@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useParams } from 'react-router';
 import { ItemCardList } from '../../components';
 import { Loader } from '../../components/Loader';
@@ -10,6 +10,11 @@ const ItemsPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const fetchItems = useFetchItems();
   const [{ data, isLoading }, dispatch] = useAsync<IItem[]>();
+  const title = useMemo(() => {
+    if (slug === 'topstories') return 'Top Stories';
+    if (slug === 'beststories') return 'Best Stories';
+    return 'News Stories';
+  }, [slug]);
 
   useEffect(() => {
     dispatch(fetchItems(slug));
@@ -17,7 +22,7 @@ const ItemsPage: React.FC = () => {
 
   return (
     <>
-      <h1>Items Page</h1>
+      <h1>{title}</h1>
       {isLoading && (
         <div className="loader-wrapper">
           <Loader />

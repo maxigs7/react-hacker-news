@@ -1,2 +1,28 @@
-.card {
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  font-size: 1.1rem;
+}
+
+.link {
+  color: #4c5463;
+  display: block;
+  margin-top: auto;
+  text-decoration: none;
+}
+
+.link svg {
+  margin-right: 10px;
+}
+
+.footer {
+  display: flex;
+  margin-top: auto;
+}
+
+.footerItem:last-child {
+  margin-left: auto;
 }
