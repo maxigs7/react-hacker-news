@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Loader } from '../../components';
 import { useAsync } from '../../hooks/useAsync';

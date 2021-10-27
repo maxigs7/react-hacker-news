@@ -18,7 +18,7 @@ export const ItemCard: React.FC<IProps> = ({ item }) => {
         {item.title}
       </Link>
       {!!item.url && (
-        <a className={styles.link} target="_blank" href={item.url}>
+        <a className={styles.link} target="_blank" href={item.url} rel="noreferrer">
           <FaLink />
           Visit Link
         </a>
