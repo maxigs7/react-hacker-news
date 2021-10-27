@@ -1,0 +1,29 @@
+.navbar {
+  background-color: #282c34;
+  color: white;
+  height: 60px;
+}
+
+.menu {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.link {
+  align-items: center;
+  color: white;
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  padding: 0 10px;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.active {
+  border-bottom: 2px solid #ff4000;
+}
