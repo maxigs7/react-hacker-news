@@ -1,10 +1,8 @@
+import React, { Suspense } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
-import logo from './logo.svg';
-import './App.css';
 import { Navbar } from './components';
-import { Suspense } from 'react';
-import React from 'react';
+import './App.css';
 
 export const LazyWelcome = React.lazy(() => import(/* webpackChunkName: 'welcome' */ './pages/Welcome'));
 export const LazyItems = React.lazy(() => import(/* webpackChunkName: 'items' */ './pages/Items'));
