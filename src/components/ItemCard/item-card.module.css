@@ -3,6 +3,12 @@
   flex-direction: column;
 }
 
+.date {
+  font-size: 0.9rem;
+  font-style: italic;
+  text-align: left;
+}
+
 .title {
   color: #282c34;
   font-size: 1.1rem;

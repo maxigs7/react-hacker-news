@@ -10,8 +10,10 @@ interface IProps {
 }
 
 export const ItemCard: React.FC<IProps> = ({ item }) => {
+  const date = new Date(item.time * 1000);
   return (
     <Card className={styles.container}>
+      <span className={styles.date}>{date.toLocaleDateString()}</span>
       <Link to={`/item/${item.id}`} className={styles.title}>
         {item.title}
       </Link>
