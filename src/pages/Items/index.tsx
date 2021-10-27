@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router';
+import { ItemCardList } from '../../components';
 import { Loader } from '../../components/Loader';
 import { useAsync } from '../../hooks/useAsync';
 import { useFetchItems } from '../../hooks/useFetchItems';
@@ -22,7 +23,7 @@ const ItemsPage: React.FC = () => {
           <Loader />
         </div>
       )}
-      {data && data.map((data) => <p key={data.id}>{JSON.stringify(data)}</p>)}
+      {data && <ItemCardList items={data} />}
     </>
   );
 };
