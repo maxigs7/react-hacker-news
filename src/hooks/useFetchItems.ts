@@ -3,7 +3,7 @@ import { IItem } from '../shared/model';
 import { useFetch } from './useFetch';
 import { useFetchItem } from './useFetchItem';
 
-const maxItems = 10;
+const maxItems = 20;
 
 export const useFetchItems = () => {
   const fetch = useFetch();

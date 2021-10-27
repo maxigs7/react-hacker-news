@@ -4,7 +4,15 @@
 }
 
 .title {
+  color: #282c34;
   font-size: 1.1rem;
+  margin-bottom: 15px;
+  margin-top: 10px;
+  text-decoration: none;
+}
+
+.title:hover {
+  text-decoration: underline;
 }
 
 .link {

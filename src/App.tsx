@@ -6,6 +6,7 @@ import './App.css';
 
 export const LazyWelcome = React.lazy(() => import(/* webpackChunkName: 'welcome' */ './pages/Welcome'));
 export const LazyItems = React.lazy(() => import(/* webpackChunkName: 'items' */ './pages/Items'));
+export const LazyItem = React.lazy(() => import(/* webpackChunkName: 'item' */ './pages/Item'));
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
 
         <Suspense fallback="Loading...">
           <Switch>
+            <Route component={LazyItem} path="/item/:id" />
             <Route component={LazyItems} path="/:slug" />
             <Route component={LazyWelcome} path="/" exact={true} />
           </Switch>

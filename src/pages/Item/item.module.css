@@ -1,0 +1,26 @@
+.container {
+  margin: auto;
+  max-width: 1024px;
+  padding: 10px;
+}
+
+.date {
+  font-style: italic;
+  font-size: 1rem;
+  display: block;
+  margin-top: 15px;
+  text-align: left;
+}
+
+.title {
+  margin-top: 5px;
+}
+
+.text {
+  text-align: justify;
+}
+
+.userInfo {
+  font-weight: bold;
+  text-align: left;
+}

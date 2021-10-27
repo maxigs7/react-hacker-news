@@ -1,4 +1,5 @@
 import { FaLink, FaRegComment, FaThumbsUp } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
 import { IItem } from '../../shared/model';
 import { Card } from '../Card';
@@ -11,7 +12,9 @@ interface IProps {
 export const ItemCard: React.FC<IProps> = ({ item }) => {
   return (
     <Card className={styles.container}>
-      <h2 className={styles.title}>{item.title}</h2>
+      <Link to={`/item/${item.id}`} className={styles.title}>
+        {item.title}
+      </Link>
       {!!item.url && (
         <a className={styles.link} target="_blank" href={item.url}>
           <FaLink />
