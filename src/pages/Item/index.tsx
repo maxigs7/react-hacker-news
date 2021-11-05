@@ -1,41 +1,40 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Loader } from '../../components';
+
+import { Flex } from '@chakra-ui/react';
+
+import { ItemSummary, Loader } from '../../components';
+import { CommentsContainer, UserContainer } from '../../containers';
 import { useAsync } from '../../hooks/useAsync';
 import { useFetchItem } from '../../hooks/useFetchItem';
 import { IItem } from '../../shared/model';
-import styles from './item.module.css';
 
 const ItemPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const fetchItem = useFetchItem();
-  const [{ data, isLoading }, dispatch] = useAsync<IItem>();
+  const { data: item, execute, isLoading } = useAsync<IItem>(() => fetchItem(+id));
 
   useEffect(() => {
-    // TODO: Validate string on route (regexp for numbers)
-    dispatch(fetchItem(+id));
-  }, [dispatch, fetchItem, id]);
+    execute();
+  }, []);
 
   if (isLoading) {
     return (
-      <div className="loader-wrapper">
+      <Flex align="center" justify="center" p="20">
         <Loader />
-      </div>
+      </Flex>
     );
   }
-  if (!data) return null;
+  if (!item) return null;
 
   // UNIX TIME
-  const date = new Date(data.time * 1000);
 
   return (
-    <div className={styles.container}>
-      <span className={styles.date}>{date.toLocaleDateString()}</span>
-      <h1 className={styles.title}>{data.title}</h1>
-      {data.text && <div dangerouslySetInnerHTML={{ __html: data.text }} className={styles.text} />}
-
-      <div className={styles.userInfo}>Created by {data.by}</div>
-    </div>
+    <>
+      <ItemSummary {...item} />
+      <UserContainer id={item.by} />
+      {item.kids && <CommentsContainer comments={item.kids} />}
+    </>
   );
 };
 

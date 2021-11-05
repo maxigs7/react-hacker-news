@@ -1,29 +1,43 @@
 import React, { Suspense } from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 
-import { Navbar } from './components';
-import './App.css';
+import { Flex } from '@chakra-ui/react';
 
-export const LazyWelcome = React.lazy(() => import(/* webpackChunkName: 'welcome' */ './pages/Welcome'));
-export const LazyItems = React.lazy(() => import(/* webpackChunkName: 'items' */ './pages/Items'));
-export const LazyItem = React.lazy(() => import(/* webpackChunkName: 'item' */ './pages/Item'));
+import { Navbar, PageLoader } from './components';
+import { routes } from './routes';
 
-function App() {
-  return (
-    <BrowserRouter>
-      <div className="App">
-        <Navbar />
-
-        <Suspense fallback="Loading...">
-          <Switch>
-            <Route component={LazyItem} path="/item/:id" />
-            <Route component={LazyItems} path="/:slug" />
-            <Route component={LazyWelcome} path="/" exact={true} />
-          </Switch>
-        </Suspense>
-      </div>
-    </BrowserRouter>
-  );
-}
+const App: React.FC = () => (
+  <Flex
+    bg="hn-orange.100"
+    direction="column"
+    flex={1}
+    minH="100vh"
+    overflow="hidden"
+    overflowX="hidden"
+    overflowY="auto"
+    pos="relative"
+  >
+    <Navbar />
+    <Flex
+      as="main"
+      direction="column"
+      maxW="container.lg"
+      mx="auto"
+      px={{ base: 4, sm: 6, lg: 8 }}
+      py={8}
+      width="full"
+    >
+      <Suspense fallback={<PageLoader />}>
+        <Switch>
+          {routes.map((route, index) => (
+            <Route {...route} key={index} />
+          ))}
+          <Redirect from="/" to="/welcome" exact />
+          <Redirect from="*" to="/404" />
+        </Switch>
+      </Suspense>
+    </Flex>
+  </Flex>
+);
 
 export default App;

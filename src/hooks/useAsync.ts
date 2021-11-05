@@ -1,45 +1,62 @@
-import { useCallback, useReducer } from 'react';
+import { useCallback, useMemo, useReducer } from 'react';
 
-interface IState<T> {
+interface IState<T, E> {
   data?: T;
-  error?: string;
-  isLoading: boolean;
+  error?: E;
+  status: 'idle' | 'loading' | 'success' | 'error';
 }
 
-const initialState = {
-  isLoading: false,
-};
-
 const createReducer =
-  <T>() =>
-  (state: IState<T>, action: any): IState<T> => {
-    if (action.type === 'request') {
-      return { ...state, isLoading: true, data: undefined, error: undefined };
+  <T, E>() =>
+  (state: IState<T, E>, action: any): IState<T, E> => {
+    switch (action.type) {
+      case 'request':
+        return { ...state, status: 'loading', data: undefined, error: undefined };
+      case 'success':
+        return { ...state, status: 'success', data: action.payload, error: undefined };
+      case 'error':
+        return { ...state, status: 'error', data: undefined, error: action.payload };
+      default:
+        return state;
     }
-    if (action.type === 'success') {
-      return { ...state, isLoading: false, data: action.payload, error: undefined };
-    }
-    if (action.type === 'error') {
-      return { ...state, isLoading: false, data: undefined, error: action.payload };
-    }
-    return state;
   };
 
-export const useAsync = <T>(): [IState<T>, (promiseFn: Promise<T>) => void] => {
-  const reducer = createReducer<T>();
+export interface UseAsyncReturn<T, E = string> extends IState<T, E> {
+  execute(): Promise<void>;
+  isError: boolean;
+  isIdle: boolean;
+  isLoading: boolean;
+  isSuccess: boolean;
+}
+
+export const useAsync = <T, E = string>(asyncFunction: () => Promise<T>): UseAsyncReturn<T, E> => {
+  const reducer = useMemo(() => createReducer<T, E>(), []);
+  const initialState: IState<T, E> = useMemo(
+    () => ({ data: undefined, error: undefined, status: 'idle' }),
+    [],
+  );
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const asyncFn = useCallback((promiseFn: Promise<T>) => {
+  const execute = useCallback(() => {
     dispatch({ type: 'request' });
-    promiseFn.then(
-      (data) => {
-        dispatch({ type: 'success', payload: data });
-      },
-      (reason) => {
-        dispatch({ type: 'error', payload: reason });
-      },
-    );
-  }, []);
+    return asyncFunction()
+      .then((response: any) => {
+        dispatch({ type: 'success', payload: response as T });
+      })
+      .catch((error: any) => {
+        dispatch({ type: 'error', payload: error as E });
+      });
+  }, [asyncFunction]);
 
-  return [state, asyncFn];
+  return useMemo(
+    () => ({
+      ...state,
+      execute,
+      isError: state.status === 'error',
+      isIdle: state.status === 'idle',
+      isLoading: state.status === 'loading',
+      isSuccess: state.status === 'success',
+    }),
+    [state, execute],
+  );
 };

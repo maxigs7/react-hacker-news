@@ -1,14 +1,15 @@
 import { useCallback } from 'react';
+
 import { IItem } from '../shared/model';
 import { useFetch } from './useFetch';
 import { useFetchItem } from './useFetchItem';
 
-const maxItems = 20;
+type UseFetchItemsReturn = (ids: number[]) => Promise<IItem[]>;
+type UseFetchItems = () => UseFetchItemsReturn;
 
-export const useFetchItems = () => {
+export const useFetchItems: UseFetchItems = () => {
   const fetch = useFetch();
   const fetchItem = useFetchItem();
-  // TODO: Improve adding external pagination
-  const fetchItems = useCallback((response: number[]) => Promise.all(response.slice(0, maxItems).map(fetchItem)), [fetchItem]);
-  return useCallback((key: string): Promise<IItem[]> => fetch(key).then(fetchItems), [fetch, fetchItems]);
+
+  return useCallback((ids: number[]): Promise<IItem[]> => Promise.all(ids.map(fetchItem)), [fetch]);
 };
